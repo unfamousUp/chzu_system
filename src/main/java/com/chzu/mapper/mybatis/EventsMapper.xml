@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chzu.mapper.EventsMapper">
+    <!--
+        更新网信办事件状态：待办 -> 在办
+        更新机构状态：待通告 - > 待办
+        更新该事件处理状态为：待审核
+        更新该事件类型为：在办
+    -->
+    <update id="updateEventsInfoForAdminUser">
+        update events
+        set event_status = #{eventsStatus},
+            event_status_institution = #{eventStatusInstitution},
+            event_type = #{eventType},
+            process_status = #{processStatus},
+            processed_by_user = #{userId}
+        where event_id = #{eventId}
+    </update>
+
+    <update id="updateEventsInfoForInstitutionUser">
+#         update events
+#         set event_status = #{eventsStatus},
+#             event_status_institution = #{eventStatusInstitution},
+#             processed_by_user = #{userId}
+#         where event_id = #{eventId}
+    </update>
+
+    <update id="resetToDoEventsInfo">
+        update events
+        set event_status = #{eventsStatus},
+            event_status_institution = #{eventStatusInstitution},
+            event_type = #{eventType},
+            process_status = #{processStatus},
+            processed_by_user = #{userId}
+        where event_id = #{eventId}
+    </update>
+
+    <select id="getEventsByAssignedUserId" resultType="com.chzu.entity.Events">
+        select * from events where assigned_by_user = #{userId}
+    </select>
+
+    <select id="getEventsByProcessUserId" resultType="com.chzu.entity.Events">
+        select * from events where processed_by_user = #{userId}
+    </select>
+
+    <select id="getToDoEventsForInstitutionUser" resultMap="toDoEventsForInstitutionUser">
+        select *
+        from events,organizations org
+        where event_status_institution = #{eventStatusInstitution}
+          and processed_by_user = #{userId}
+          and assigned_to_organization = org.org_id
+    </select>
+
+    <resultMap id="toDoEventsForInstitutionUser" type="Events">
+        <result property="eventId" column="event_id"></result>
+        <result property="eventName" column="event_name"></result>
+        <result property="eventType" column="event_type"></result>
+        <result property="eventStatus" column="event_status"></result>
+        <result property="eventStatusInstitution" column="event_status_institution"></result>
+        <result property="processByUser" column="process_by_user"></result>
+        <result property="processStatus" column="process_status"></result>
+        <result property="assignedToOrganization" column="assigned_to_organization"></result>
+        <result property="assignedByUser" column="assigned_by_user"></result>
+        <result property="approvedByUser" column="approved_by_user"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="updateTime" column="update_time"></result>
+        <result property="emergencyDegree" column="emergency_degree"></result>
+        <result property="datasource" column="datasource"></result>
+        <result property="illegalContent" column="illegal_content"></result>
+        <association property="organizations" javaType="Organizations">
+            <!-- Map Organizations table columns -->
+            <id property="orgId" column="org_id" />
+            <result property="orgName" column="org_name"></result>
+            <result property="orgDomainName" column="org_domain_name"></result>
+            <result property="orgType" column="org_type"></result>
+        </association>
+    </resultMap>
+
+    <select id="getToDoEventsForAdminUser" resultMap="toDoEventsForAdminUser">
+        select *
+        from events,organizations org
+        where event_status = #{eventStatus}
+          and assigned_by_user = #{userId}
+          and assigned_to_organization = org.org_id
+    </select>
+
+
+    <resultMap id="toDoEventsForAdminUser" type="Events">
+        <result property="eventId" column="event_id"></result>
+        <result property="eventName" column="event_name"></result>
+        <result property="eventType" column="event_type"></result>
+        <result property="eventStatus" column="event_status"></result>
+        <result property="eventStatusInstitution" column="event_status_institution"></result>
+        <result property="processByUser" column="process_by_user"></result>
+        <result property="processStatus" column="process_status"></result>
+        <result property="assignedToOrganization" column="assigned_to_organization"></result>
+        <result property="assignedByUser" column="assigned_by_user"></result>
+        <result property="approvedByUser" column="approved_by_user"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="updateTime" column="update_time"></result>
+        <result property="emergencyDegree" column="emergency_degree"></result>
+        <result property="datasource" column="datasource"></result>
+        <result property="illegalContent" column="illegal_content"></result>
+        <association property="organizations" javaType="Organizations">
+            <!-- Map Organizations table columns -->
+            <id property="orgId" column="org_id" />
+            <result property="orgName" column="org_name"></result>
+            <result property="orgDomainName" column="org_domain_name"></result>
+            <result property="orgType" column="org_type"></result>
+        </association>
+    </resultMap>
+
+
+    <select id="getAtToDoEventsForAdminUser" resultMap="toAtToDoEventsForAdminUser">
+        select *
+        from events,organizations org
+        where event_status = #{eventStatus}
+          and assigned_by_user = #{userId}
+          and assigned_to_organization = org.org_id
+    </select>
+
+    <resultMap id="toAtToDoEventsForAdminUser" type="Events">
+        <result property="eventId" column="event_id"></result>
+        <result property="eventName" column="event_name"></result>
+        <result property="eventType" column="event_type"></result>
+        <result property="eventStatus" column="event_status"></result>
+        <result property="eventStatusInstitution" column="event_status_institution"></result>
+        <result property="processByUser" column="process_by_user"></result>
+        <result property="processStatus" column="process_status"></result>
+        <result property="assignedToOrganization" column="assigned_to_organization"></result>
+        <result property="assignedByUser" column="assigned_by_user"></result>
+        <result property="approvedByUser" column="approved_by_user"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="updateTime" column="update_time"></result>
+        <result property="emergencyDegree" column="emergency_degree"></result>
+        <result property="datasource" column="datasource"></result>
+        <result property="illegalContent" column="illegal_content"></result>
+        <association property="organizations" javaType="Organizations">
+            <!-- Map Organizations table columns -->
+            <id property="orgId" column="org_id" />
+            <result property="orgName" column="org_name"></result>
+            <result property="orgDomainName" column="org_domain_name"></result>
+            <result property="orgType" column="org_type"></result>
+        </association>
+    </resultMap>
+
+</mapper>

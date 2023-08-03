@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chzu.mapper.UserMapper">
+
+    <select id="getUserWithRoles" resultMap="userWithRoles">
+        select * from user where username = #{username}
+    </select>
+
+    <resultMap id="userWithRoles" type="User">
+        <result property="username" column="username"></result>
+        <collection property="roles" select="com.chzu.mapper.RoleMapper.getRoleByUsername" column="username">
+        </collection>
+    </resultMap>
+
+    <select id="getUserPermissionInfo" resultType="java.lang.String">
+        select permission_info from permissions where permission_id in (
+            select permission_id from role_ps where role_id in (
+                select role_id from role where role_name in
+                <foreach collection="roles" item="name" open="(" separator="," close=")">
+                    #{name}
+                </foreach>
+                )
+            )
+    </select>
+
+    <select id="getUserByOrgId" resultType="com.chzu.entity.User">
+        select * from user where org_id = #{orgId}
+    </select>
+
+    <select id="getUserByUserId" resultType="com.chzu.entity.User">
+        select * from user where user_id = #{userId}
+    </select>
+</mapper>

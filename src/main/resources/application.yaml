@@ -1,0 +1,43 @@
+spring:
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:13306/chzu?serverTimezone=UTC
+      username: root
+      password: root
+  redis:
+    host: 192.168.244.128
+    port: 6379
+    password: 123456
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+        max-wait: 100
+  profiles:
+    active: dev
+
+mybatis-plus:
+  global-config:
+    db-config:
+      table-prefix: # 添加表的前缀
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:com/chzu/mapper/mybatis/*.xml
+  type-aliases-package: com.chzu.entity # 类注册别名
+
+shiro:
+#  loginUrl: /user/loginPage
+
+server:
+  port: 8088
+
+logging:
+  level:
+    org:
+      springframework=DEBUG:

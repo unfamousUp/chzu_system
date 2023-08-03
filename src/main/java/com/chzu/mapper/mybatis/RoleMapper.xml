@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chzu.mapper.RoleMapper">
+
+    <select id="getRoleByUsername" resultType="com.chzu.entity.Role">
+        select *
+        from role
+        where role_id in
+              (
+                  select role_id
+                  from role_user
+                  where user_id = (
+                      select user_id
+                      from user
+                      where username = #{principal}
+                  )
+              )
+    </select>
+
+    <select id="getRolenameByUsername" resultType="String">
+        select role_name
+        from role
+        where role_id in
+              (
+                  select role_id
+                  from role_user
+                  where user_id = (
+                      select user_id
+                      from user
+                      where username = #{principal}
+                  )
+              )
+    </select>
+
+</mapper>
