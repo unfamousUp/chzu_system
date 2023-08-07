@@ -72,4 +72,10 @@ public interface EventsMapper extends BaseMapper<Events> {
      * @return
      */
     Integer resetToDoEventsInfo(UpdateEventsInfoDTO updateEventsInfoDTO);
+
+    /**
+     * 添加事件信息
+     * @return
+     */
+    Integer addEventsInfo(Events events);
 }

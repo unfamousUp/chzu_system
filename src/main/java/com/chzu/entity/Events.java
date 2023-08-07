@@ -1,6 +1,7 @@
 package com.chzu.entity;
 
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -21,6 +22,7 @@ public class Events {
 
     @TableId(value = "event_id", type = IdType.AUTO)
     @ApiModelProperty("事件ID")
+    @ExcelProperty("事件ID")
     private Integer eventId;
 
     @TableField("event_name")
@@ -29,26 +31,32 @@ public class Events {
 
     @TableField("event_type")
     @ApiModelProperty("事件类型：通告")
+    @ExcelProperty("事件类型")
     private String eventType;
 
     @TableField("event_status")
     @ApiModelProperty("事件在网信办的状态:待办|在办|办结")
+    @ExcelProperty("网信办事件状态")
     private String eventStatus;
 
     @TableField("event_status_institution")
     @ApiModelProperty("事件在机构的状态:待办|在办|办结")
+    @ExcelProperty("机构事件状态")
     private String eventStatusInstitution;
 
     @TableField("process_by_user")
     @ApiModelProperty("设置处理该事件的机构用户ID")
+    @ExcelProperty("处理事件的机构用户ID")
     private Integer processByUser; // 网信办用户手动选择用户id
 
     @TableField("process_status")
     @ApiModelProperty("事件在机构的处理状态：")
+    @ExcelProperty("事件处理状态")
     private String processStatus;
 
     @TableField("assigned_to_organization")
     @ApiModelProperty("事件分配给的机构ID")
+    @ExcelProperty("指定的目标机构ID")
     private Integer assignedToOrganization;
 
     @TableField("create_time")
@@ -61,10 +69,12 @@ public class Events {
 
     @TableField("assigned_by_user")
     @ApiModelProperty("发布该事件的网信办用户ID")
+    @ExcelProperty("发布事件的网信办用户ID")
     private Integer assignedByUser = 1; // 默认为wxb用户
 
     @TableField("approved_by_user")
     @ApiModelProperty("审核通过事件的网信办用户ID")
+    @ExcelProperty("审核通过事件的网信办用户ID")
     private Integer approvedByUser = 1; // 默认为wxb用户
 
     @TableField("approval_status")
@@ -73,14 +83,17 @@ public class Events {
 
     @TableField("emergency_degree")
     @ApiModelProperty("事件紧急程度")
+    @ExcelProperty("紧急程度")
     private String emergencyDegree;
 
     @TableField("datasource")
     @ApiModelProperty("数据来源")
+    @ExcelProperty("数据来源")
     private String datasource;
 
     @TableField("illegal_content")
     @ApiModelProperty("违规内容")
+    @ExcelProperty("违规内容")
     private String illegalContent;
 
     // 数据库中不存在的字段可以使用该注解

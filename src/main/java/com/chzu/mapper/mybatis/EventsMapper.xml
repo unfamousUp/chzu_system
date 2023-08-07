@@ -3,6 +3,10 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.chzu.mapper.EventsMapper">
+    <insert id="addEventsInfo" parameterType="events">
+        INSERT INTO events (event_id, event_type, event_status, event_status_institution, processed_by_user, process_status, assigned_to_organization, assigned_by_user, approved_by_user, emergency_degree, datasource, Illegal_content)
+        VALUES (#{eventId}, #{eventType}, #{eventStatus}, #{eventStatusInstitution}, #{processByUser}, #{processStatus}, #{assignedToOrganization}, #{assignedByUser}, #{approvedByUser}, #{emergencyDegree}, #{datasource}, #{illegalContent})
+    </insert>
     <!--
         更新网信办事件状态：待办 -> 在办
         更新机构状态：待通告 - > 待办

@@ -166,8 +166,19 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
         </dependency>
+        <!--<dependency>-->
+        <!--    <groupId>com.horaoen</groupId>-->
+        <!--    <artifactId>devkit-spring-boot-starter</artifactId>-->
+        <!--    <version>0.0.4-SNAPSHOT</version>-->
+        <!--</dependency>-->
     </dependencies>
-
+    <!--<repositories>-->
+    <!--    <repository>-->
+    <!--        <id>github</id>-->
+    <!--        <name>horaoen</name>-->
+    <!--        <url>https://maven.pkg.github.com/horaoen/devkit</url>-->
+    <!--    </repository>-->
+    <!--</repositories>-->
     <build>
         <plugins>
             <plugin>
