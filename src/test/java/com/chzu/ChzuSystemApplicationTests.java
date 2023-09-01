@@ -93,8 +93,8 @@ class ChzuSystemApplicationTests {
 
     @Test
     void Test(){
-        String uuid = ConvertToUUID.generateShortUuid();
-        log.info("{}", uuid);
+        List<Events> events = eventsMapper.getToDoEventsByOrgNameForAdminUser("待办", 1, "滁州");
+        System.out.println(events);
     }
 
     @Test

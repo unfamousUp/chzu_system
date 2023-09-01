@@ -150,4 +150,39 @@
         </association>
     </resultMap>
 
+    <select id="getToDoEventsByOrgNameForAdminUser" resultMap="toDoEventsByOrgNameForAdminUser">
+        select *
+        from events,organizations org
+        where event_status = #{eventStatus}
+          and assigned_by_user = #{userId}
+          and assigned_to_organization = org.org_id
+          and org.org_name LIKE CONCAT('%', #{orgName}, '%')
+    </select>
+
+    <resultMap id="toDoEventsByOrgNameForAdminUser" type="Events">
+        <result property="eventId" column="event_id"></result>
+        <result property="eventName" column="event_name"></result>
+        <result property="eventType" column="event_type"></result>
+        <result property="eventStatus" column="event_status"></result>
+        <result property="eventStatusInstitution" column="event_status_institution"></result>
+        <result property="processByUser" column="process_by_user"></result>
+        <result property="processStatus" column="process_status"></result>
+        <result property="assignedToOrganization" column="assigned_to_organization"></result>
+        <result property="assignedByUser" column="assigned_by_user"></result>
+        <result property="approvedByUser" column="approved_by_user"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="updateTime" column="update_time"></result>
+        <result property="emergencyDegree" column="emergency_degree"></result>
+        <result property="datasource" column="datasource"></result>
+        <result property="illegalContent" column="illegal_content"></result>
+        <association property="organizations" javaType="Organizations">
+            <!-- Map Organizations table columns -->
+            <id property="orgId" column="org_id" />
+            <result property="orgName" column="org_name"></result>
+            <result property="orgDomainName" column="org_domain_name"></result>
+            <result property="orgType" column="org_type"></result>
+        </association>
+    </resultMap>
+
+
 </mapper>
