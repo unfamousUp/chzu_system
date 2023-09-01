@@ -22,7 +22,7 @@ public interface EventsService {
 
     R<List<Events>> getEventsByProcessUserId(Integer userId);
 
-
+    R<List<EventsWithOrgVo>> getWaitToEventsInfoByOrgName(Integer userId, String orgName);
 
     R resetToDoEventsInfo(UpdateEventsInfoDTO updateEventsInfoDTO);
 }

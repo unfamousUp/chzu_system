@@ -80,6 +80,32 @@ public class EventsServiceImpl implements EventsService {
         return R.buildR(Status.SYSTEM_ERROR, "查询失败");
     }
 
+    /**
+     * 根据机构名称查询待办事件信息
+     * @param userId
+     * @param orgName
+     * @return
+     */
+    @Override
+    public R<List<EventsWithOrgVo>> getWaitToEventsInfoByOrgName(Integer userId, String orgName) {
+        String status = "待办";
+        // QueryWrapper<Events> eventsQueryWrapper = new QueryWrapper<>();
+        // QueryWrapper<Organizations> organizationsQueryWrapper = new QueryWrapper<>();
+        // 判断是否为网信办用户
+        jwtUser = (JwtUser) SecurityUtils.getSubject().getPrincipal();
+        if (jwtUser.getIsAdmin()) {
+            // List<Events> events = eventsMapper.getToDoEventsForAdminUser(userId, status);
+            List<Events> events = eventsMapper.getToDoEventsByOrgNameForAdminUser(status,userId,orgName);
+            if (events.size() != 0) return R.buildR(Status.OK, "success", EventsWithOrgVo.convertToEventsWithOrgVoList(events));
+        }
+        // 判断是否为机构用户
+        if (jwtUser.getIsInstitution()) {
+            List<Events> events = eventsMapper.getToDoEventsForInstitutionUser(userId, status);
+            if (events.size() != 0) return R.buildR(Status.OK, "success", EventsWithOrgVo.convertToEventsWithOrgVoList(events));
+        }
+        return R.buildR(Status.SYSTEM_ERROR, "查询失败");
+    }
+
     @Override
     public R<List<EventsWithOrgVo>> getAtToEventsInfo(Integer userId) {
         String status = "在办";

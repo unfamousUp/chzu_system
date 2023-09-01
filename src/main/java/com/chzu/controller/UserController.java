@@ -91,4 +91,6 @@ public class UserController {
     public R<User> getUserInfoByOrgId(@RequestParam("orgId") Integer orgId){
         return userService.getUserInfoByOrgId(orgId);
     }
+
+
 }

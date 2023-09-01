@@ -30,6 +30,24 @@ public interface EventsMapper extends BaseMapper<Events> {
     List<Events> getEventsByProcessUserId(@Param("userId")Integer userId);
 
     /**
+     * 根据机构名称获取网信办用户待办事件信息
+     * @param eventStatus
+     * @param userId
+     * @param orgName
+     * @return
+     */
+    // @Select("SELECT e.* FROM events e " +
+    //         "LEFT JOIN organizations org ON e.assigned_to_organization = org.org_id " +
+    //         "WHERE e.event_status = #{eventStatus} " +
+    //         "AND e.assigned_by_user = #{userId} " +
+    //         "AND org.org_name LIKE CONCAT('%', #{orgName}, '%')")
+    List<Events> getToDoEventsByOrgNameForAdminUser(
+            @Param("eventStatus") String eventStatus,
+            @Param("userId") Integer userId,
+            @Param("orgName") String orgName
+    );
+
+    /**
      * 根据网信办用户id获取网信办用户待办事件信息
      * @param userId
      * @param eventStatus
