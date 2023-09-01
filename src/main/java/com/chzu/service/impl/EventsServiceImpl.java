@@ -1,10 +1,8 @@
 package com.chzu.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.chzu.dto.RoleDTO;
 import com.chzu.dto.UpdateEventsInfoDTO;
 import com.chzu.entity.Events;
-import com.chzu.entity.Organizations;
 import com.chzu.mapper.EventsMapper;
 import com.chzu.mapper.OrganizationsMapper;
 import com.chzu.service.EventsService;
@@ -82,32 +80,6 @@ public class EventsServiceImpl implements EventsService {
         return R.buildR(Status.SYSTEM_ERROR, "查询失败");
     }
 
-    /**
-     * 根据机构名称查询待办事件信息
-     * @param userId
-     * @param orgName
-     * @return
-     */
-    @Override
-    public R<List<EventsWithOrgVo>> getWaitToEventsInfoByOrgName(Integer userId, String orgName) {
-        String status = "待办";
-        // QueryWrapper<Events> eventsQueryWrapper = new QueryWrapper<>();
-        // QueryWrapper<Organizations> organizationsQueryWrapper = new QueryWrapper<>();
-        // 判断是否为网信办用户
-        jwtUser = (JwtUser) SecurityUtils.getSubject().getPrincipal();
-        if (jwtUser.getIsAdmin()) {
-            // List<Events> events = eventsMapper.getToDoEventsForAdminUser(userId, status);
-            List<Events> events = eventsMapper.getToDoEventsByOrgNameForAdminUser(status,userId,orgName);
-            if (events.size() != 0) return R.buildR(Status.OK, "success", EventsWithOrgVo.convertToEventsWithOrgVoList(events));
-        }
-        // 判断是否为机构用户
-        if (jwtUser.getIsInstitution()) {
-            List<Events> events = eventsMapper.getToDoEventsForInstitutionUser(userId, status);
-            if (events.size() != 0) return R.buildR(Status.OK, "success", EventsWithOrgVo.convertToEventsWithOrgVoList(events));
-        }
-        return R.buildR(Status.SYSTEM_ERROR, "查询失败");
-    }
-
     @Override
     public R<List<EventsWithOrgVo>> getAtToEventsInfo(Integer userId) {
         String status = "在办";
@@ -140,6 +112,5 @@ public class EventsServiceImpl implements EventsService {
         if (result!=0) return R.buildR(Status.OK,"重置成功");
         return R.buildR(Status.SYSTEM_ERROR,"重置失败");
     }
-
 
 }

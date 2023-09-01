@@ -25,6 +25,4 @@ public interface EventsService {
 
 
     R resetToDoEventsInfo(UpdateEventsInfoDTO updateEventsInfoDTO);
-
-    R<List<EventsWithOrgVo>> getWaitToEventsInfoByOrgName(Integer userId, String orgName);
 }

@@ -40,16 +40,6 @@ public class EventsController {
         return eventsService.getWaitToEventsInfo(userId);
     }
 
-
-    /**
-     * 获取待办事件信息
-     */
-    @GetMapping("/events/getWaitToEventsInfoByOrgName")
-    @ApiOperation("获取待办事件信息")
-    public R<List<EventsWithOrgVo>> getWaitToEventsInfoByInstitutionName(@RequestParam("userId")Integer userId,@RequestParam("orgName")String orgName){
-        log.info("{},{}",userId,orgName);
-        return eventsService.getWaitToEventsInfoByOrgName(userId,orgName);
-    }
     /**
      * 获取在办事件信息
      */
@@ -86,7 +76,6 @@ public class EventsController {
     public R resetToDoEventsInfo(@RequestBody UpdateEventsInfoDTO updateEventsInfoDTO){
         return eventsService.resetToDoEventsInfo(updateEventsInfoDTO);
     }
-
 
 
 }
