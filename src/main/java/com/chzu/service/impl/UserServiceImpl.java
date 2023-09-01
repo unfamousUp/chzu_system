@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -48,5 +49,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<String> getUserPermissionInfo(List<String> roles) {
         return userMapper.getUserPermissionInfo(roles);
+    }
+
+    @Override
+    public R<User> getUserInfoByOrgId(Integer orgId) {
+        List<User> userList = userMapper.getUserByOrgId(orgId);
+        User user = userList.get(0);
+        if (!Objects.isNull(user)) return R.buildR(Status.OK, "success", user);
+        return R.buildR(Status.SYSTEM_ERROR);
     }
 }

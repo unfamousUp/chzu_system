@@ -9,13 +9,13 @@ import java.util.List;
 
 public interface UserService {
 
-   User getUserInfoByUsername(String username);
+    User getUserInfoByUsername(String username);
 
-   R<SelectOptionVo> getUserByUserId(Integer userId);
+    R<SelectOptionVo> getUserByUserId(Integer userId);
 
-   R<List<SelectOptionVo>> getUserByOrgId(Integer orgId);
+    R<List<SelectOptionVo>> getUserByOrgId(Integer orgId);
 
-   List<String> getUserPermissionInfo(List<String> roles);
+    List<String> getUserPermissionInfo(List<String> roles);
 
-
+    R<User> getUserInfoByOrgId(Integer orgId);
 }

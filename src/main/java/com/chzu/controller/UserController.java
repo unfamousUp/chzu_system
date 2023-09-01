@@ -81,4 +81,14 @@ public class UserController {
         return roleService.getRolesInfoByUsernameToVo(userName);
     }
 
+    /**
+     * 根据用户名获取角色信息
+     * @param orgId
+     * @return
+     */
+    @GetMapping("/getUserInfoByOrgId")
+    @ApiOperation("获取用户信息")
+    public R<User> getUserInfoByOrgId(@RequestParam("orgId") Integer orgId){
+        return userService.getUserInfoByOrgId(orgId);
+    }
 }
