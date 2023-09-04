@@ -1,5 +1,6 @@
 package com.chzu.controller;
 
+import com.chzu.dto.AddEventsInfoDTO;
 import com.chzu.dto.RoleDTO;
 import com.chzu.dto.UpdateEventsInfoDTO;
 import com.chzu.entity.Events;
@@ -60,12 +61,26 @@ public class EventsController {
         return eventsService.getAtToEventsInfo(userId);
     }
 
+    /**
+     * 修改事件信息
+     * @param updateEventsInfoDTO
+     * @return
+     */
     @PutMapping("/events/updateEventsInfo")
     @ApiOperation("修改事件信息")
     public R updateEventsInfo(@RequestBody UpdateEventsInfoDTO updateEventsInfoDTO){
         log.info("{}",updateEventsInfoDTO);
         return eventsService.updateEventsInfo(updateEventsInfoDTO);
     }
+
+    @PostMapping("/events/addEventsInfo")
+    @ApiOperation("添加事件信息")
+    public R addEventsInfo(@RequestBody AddEventsInfoDTO addEventsInfoDTO){
+        log.info("{}",addEventsInfoDTO);
+        return null;
+    }
+
+
 
     @GetMapping("/events/testGet")
     @ApiOperation("获取待办事件信息")

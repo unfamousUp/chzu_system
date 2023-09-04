@@ -2,9 +2,12 @@ package com.chzu.controller;
 
 import com.alibaba.excel.EasyExcel;
 import com.chzu.entity.Events;
+import com.chzu.entity.Organizations;
 import com.chzu.entity.SensitiveWord;
 import com.chzu.mapper.EventsMapper;
+import com.chzu.mapper.OrganizationsMapper;
 import com.chzu.utils.ExcelListener;
+import com.chzu.utils.OrgExcelListener;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,9 @@ import java.util.List;
 public class FileUploadController {
     @Autowired
     EventsMapper eventsMapper;
+
+    @Autowired
+    OrganizationsMapper organizationsMapper;
     // @PostMapping("/api/uploadSensitiveWord")
     // @ApiOperation("导入敏感词数据")
     // @RequiresRoles("admin")
@@ -81,6 +87,39 @@ public class FileUploadController {
             // 插入数据库等操作
             System.out.println(data);
             eventsMapper.addEventsInfo(data);
+        }
+
+        return ResponseEntity.ok("上传成功");
+    }
+
+    @PostMapping("/api/uploadOrgInfo")
+    @ApiOperation("上传机构信息")
+    // @RequiresRoles("admin")
+    public ResponseEntity<String> uploadOrgInfo(MultipartFile file) throws IOException {
+        if (file == null) {
+            System.out.println("Received file is null.");
+            return ResponseEntity.badRequest().body("上传的文件为空.");
+        }
+
+        System.out.println("Received file: " + file.getOriginalFilename());
+        System.out.println("File size: " + file.getSize());
+
+        InputStream inputStream = file.getInputStream();
+
+        // 解析Listener
+        OrgExcelListener orgExcelListener = new OrgExcelListener();
+
+        // 使用EasyExcel读取Excel
+        EasyExcel.read(inputStream, Organizations.class, orgExcelListener).sheet().doRead();
+
+        // 获取数据
+        List<Organizations> list = orgExcelListener.getDatas();
+
+        // DemoData为实体类,用来映射Excel行数据
+        for (Organizations data : list) {
+            // 插入数据库等操作
+            System.out.println(data);
+            organizationsMapper.insertOrgInfo(data);
         }
 
         return ResponseEntity.ok("上传成功");

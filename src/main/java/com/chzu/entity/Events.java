@@ -103,4 +103,10 @@ public class Events {
     // 数据库中不存在的字段可以使用该注解
     @TableField(exist = false)
     private Organizations organizations;
+
+    public Events(String emergencyDegree, String datasource, String illegalContent) {
+        this.emergencyDegree = emergencyDegree;
+        this.datasource = datasource;
+        this.illegalContent = illegalContent;
+    }
 }
