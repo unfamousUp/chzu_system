@@ -77,7 +77,7 @@ public class EventsController {
     @ApiOperation("添加事件信息")
     public R addEventsInfo(@RequestBody AddEventsInfoDTO addEventsInfoDTO){
         log.info("{}",addEventsInfoDTO);
-        return null;
+        return eventsService.addEventsInfo(addEventsInfoDTO);
     }
 
 

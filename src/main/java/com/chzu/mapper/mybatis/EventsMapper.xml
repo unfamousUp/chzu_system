@@ -149,7 +149,6 @@
             <result property="orgType" column="org_type"></result>
         </association>
     </resultMap>
-
     <select id="getToDoEventsByOrgNameForAdminUser" resultMap="toDoEventsByOrgNameForAdminUser">
         select *
         from events,organizations org

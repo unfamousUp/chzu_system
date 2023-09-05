@@ -1,5 +1,6 @@
 package com.chzu.service.impl;
 
+import com.chzu.dto.AddEventsInfoDTO;
 import com.chzu.dto.RoleDTO;
 import com.chzu.dto.UpdateEventsInfoDTO;
 import com.chzu.entity.Events;
@@ -45,7 +46,7 @@ public class EventsServiceImpl implements EventsService {
             updateEventsInfoDTO.setEventType("在办"); // 事件类型：在办
             updateEventsInfoDTO.setEventsStatus("在办"); // 待办 -> 在办
             updateEventsInfoDTO.setEventStatusInstitution("待办"); // 待通告 -> 待办
-            updateEventsInfoDTO.setProcessStatus("待处理"); // 机构待处理
+            updateEventsInfoDTO.setProcessStatus("待处理"); // 处理状态：待通告 -> 待处理
             log.info("{}",updateEventsInfoDTO);
             Integer result = eventsMapper.updateEventsInfoForAdminUser(updateEventsInfoDTO);
             if (result!=0) return R.buildR(Status.OK,"更新事件成功");
@@ -139,4 +140,14 @@ public class EventsServiceImpl implements EventsService {
         return R.buildR(Status.SYSTEM_ERROR,"重置失败");
     }
 
+    @Override
+    public R<Boolean> addEventsInfo(AddEventsInfoDTO addEventsInfoDTO) {
+        jwtUser = (JwtUser) SecurityUtils.getSubject().getPrincipal();
+        if (jwtUser.getIsAdmin()) {
+            addEventsInfoDTO.setEventsInfo();
+            Integer result = eventsMapper.addEventsInfo(addEventsInfoDTO);
+            return R.buildR(Status.OK, "success", !(result == 0));
+        }
+        return R.buildR(Status.SYSTEM_ERROR,"重置失败");
+    }
 }

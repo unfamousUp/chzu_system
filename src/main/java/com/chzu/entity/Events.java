@@ -104,7 +104,8 @@ public class Events {
     @TableField(exist = false)
     private Organizations organizations;
 
-    public Events(String emergencyDegree, String datasource, String illegalContent) {
+    public Events(Integer assignedToOrganization,String emergencyDegree, String datasource, String illegalContent) {
+        this.assignedToOrganization = assignedToOrganization;
         this.emergencyDegree = emergencyDegree;
         this.datasource = datasource;
         this.illegalContent = illegalContent;

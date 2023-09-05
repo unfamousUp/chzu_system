@@ -1,5 +1,6 @@
 package com.chzu.service;
 
+import com.chzu.dto.AddEventsInfoDTO;
 import com.chzu.dto.RoleDTO;
 import com.chzu.dto.UpdateEventsInfoDTO;
 import com.chzu.entity.Events;
@@ -25,4 +26,6 @@ public interface EventsService {
     R<List<EventsWithOrgVo>> getWaitToEventsInfoByOrgName(Integer userId, String orgName);
 
     R resetToDoEventsInfo(UpdateEventsInfoDTO updateEventsInfoDTO);
+
+    R<Boolean> addEventsInfo(AddEventsInfoDTO addEventsInfoDTO);
 }

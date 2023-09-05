@@ -2,6 +2,7 @@ package com.chzu.mapper;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.chzu.dto.AddEventsInfoDTO;
 import com.chzu.dto.UpdateEventsInfoDTO;
 import com.chzu.entity.Events;
 import com.chzu.utils.R;
@@ -96,4 +97,10 @@ public interface EventsMapper extends BaseMapper<Events> {
      * @return
      */
     Integer addEventsInfo(Events events);
+
+    /**
+     * 添加事件信息
+     * @return
+     */
+    Integer addEventsInfo(AddEventsInfoDTO addEventsInfoDTO);
 }
