@@ -44,7 +44,7 @@ public class Events {
     @ExcelProperty("机构事件状态")
     private String eventStatusInstitution;
 
-    @TableField("process_by_user")
+    @TableField("processed_by_user")
     @ApiModelProperty("设置处理该事件的机构用户ID")
     @ExcelProperty("处理事件的机构用户ID")
     private Integer processByUser; // 网信办用户手动选择用户id

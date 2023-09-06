@@ -25,7 +25,9 @@ public interface EventsService {
 
     R<List<EventsWithOrgVo>> getWaitToEventsInfoByOrgName(Integer userId, String orgName);
 
-    R resetToDoEventsInfo(UpdateEventsInfoDTO updateEventsInfoDTO);
+    R<Boolean> resetToDoEventsInfo(UpdateEventsInfoDTO updateEventsInfoDTO);
+
+    R<Boolean> rollBackEventsInfo(UpdateEventsInfoDTO updateEventsInfoDTO);
 
     R<Boolean> addEventsInfo(AddEventsInfoDTO addEventsInfoDTO);
 }

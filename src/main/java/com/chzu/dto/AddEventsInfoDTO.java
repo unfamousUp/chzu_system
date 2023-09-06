@@ -24,7 +24,7 @@ public class AddEventsInfoDTO extends Events {
     public void setEventsInfo(){
         setAssignedToOrganization(orgId);
         setEventStatus("待办");
-        setProcessStatus("待处理");
+        setProcessStatus("待通告");
         setEventType("待通告");
         setEventStatusInstitution("待通知");
     }

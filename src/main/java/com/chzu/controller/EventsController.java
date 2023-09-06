@@ -31,6 +31,7 @@ public class EventsController {
     @Autowired
     private EventsService eventsService;
 
+
     /**
      * 获取待办事件信息
      */
@@ -81,7 +82,6 @@ public class EventsController {
     }
 
 
-
     @GetMapping("/events/testGet")
     @ApiOperation("获取待办事件信息")
     public String testGet(){
@@ -100,6 +100,12 @@ public class EventsController {
     @ApiOperation("重置待办事件")
     public R resetToDoEventsInfo(@RequestBody UpdateEventsInfoDTO updateEventsInfoDTO){
         return eventsService.resetToDoEventsInfo(updateEventsInfoDTO);
+    }
+
+    @PutMapping("/events/rollBackEventsInfo")
+    @ApiOperation("回滚事件信息")
+    public R<Boolean> rollBackEventsInfo(@RequestBody UpdateEventsInfoDTO updateEventsInfoDTO){
+        return eventsService.rollBackEventsInfo(updateEventsInfoDTO);
     }
 
 

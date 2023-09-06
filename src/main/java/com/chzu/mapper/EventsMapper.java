@@ -70,7 +70,7 @@ public interface EventsMapper extends BaseMapper<Events> {
      * @param eventStatus
      * @return
      */
-    List<Events> getAtToDoEventsForAdminUser(@Param("userId")Integer userId,@Param("eventStatus")String eventStatus);
+    List<Events> getAtToDoEventsForAdminUser(@Param("userId")Integer userId,@Param("eventStatus")String eventStatus,@Param("processStatus") String processStatus);
 
     /**
      * 为网信办更新待办事件信息
@@ -91,6 +91,12 @@ public interface EventsMapper extends BaseMapper<Events> {
      * @return
      */
     Integer resetToDoEventsInfo(UpdateEventsInfoDTO updateEventsInfoDTO);
+
+    /**
+     * 撤销事件信息
+     * @return
+     */
+    Integer rollBackEventsInfo(UpdateEventsInfoDTO updateEventsInfoDTO);
 
     /**
      * 添加事件信息

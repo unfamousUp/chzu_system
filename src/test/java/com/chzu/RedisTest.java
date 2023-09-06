@@ -2,6 +2,8 @@ package com.chzu;
 
 import com.alibaba.fastjson.JSON;
 import com.chzu.entity.User;
+import com.chzu.service.impl.RedisService;
+import com.chzu.utils.R;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +24,17 @@ public class RedisTest {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    @Autowired
+    private RedisService redisService;
+
     @Test
     void testString(){
-        stringRedisTemplate.opsForValue().set("name","Chenjiujia");
-
-        Object name = stringRedisTemplate.opsForValue().get("name");
-        log.info("{}",name);
+        // stringRedisTemplate.opsForValue().set("name","Chenjiujia");
+        //
+        // Object name = stringRedisTemplate.opsForValue().get("name");
+        // log.info("{}",name);
+        redisService.saveUserContent(2,"aaaa");
+        R<String> userContent = redisService.getUserContent(2);
     }
 
     @Test

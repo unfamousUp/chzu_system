@@ -24,14 +24,25 @@
     </update>
 
     <update id="updateEventsInfoForInstitutionUser">
-#         update events
-#         set event_status = #{eventsStatus},
-#             event_status_institution = #{eventStatusInstitution},
-#             processed_by_user = #{userId}
-#         where event_id = #{eventId}
+        update events
+        set event_status = #{eventsStatus},
+            event_status_institution = #{eventStatusInstitution},
+            event_type = #{eventType},
+            process_status = #{processStatus}
+        where event_id = #{eventId}
     </update>
 
     <update id="resetToDoEventsInfo">
+        update events
+        set event_status = #{eventsStatus},
+            event_status_institution = #{eventStatusInstitution},
+            event_type = #{eventType},
+            process_status = #{processStatus},
+            processed_by_user = #{userId}
+        where event_id = #{eventId}
+    </update>
+
+    <update id="rollBackEventsInfo">
         update events
         set event_status = #{eventsStatus},
             event_status_institution = #{eventStatusInstitution},
@@ -97,7 +108,7 @@
         <result property="eventType" column="event_type"></result>
         <result property="eventStatus" column="event_status"></result>
         <result property="eventStatusInstitution" column="event_status_institution"></result>
-        <result property="processByUser" column="process_by_user"></result>
+        <result property="processByUser" column="processed_by_user"></result>
         <result property="processStatus" column="process_status"></result>
         <result property="assignedToOrganization" column="assigned_to_organization"></result>
         <result property="assignedByUser" column="assigned_by_user"></result>
@@ -121,6 +132,7 @@
         select *
         from events,organizations org
         where event_status = #{eventStatus}
+          and process_status = #{processStatus}
           and assigned_by_user = #{userId}
           and assigned_to_organization = org.org_id
     </select>
