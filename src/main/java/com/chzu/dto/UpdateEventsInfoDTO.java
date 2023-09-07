@@ -45,6 +45,10 @@ public class UpdateEventsInfoDTO {
     @ApiModelProperty("附件文本信息")
     private String textarea;
 
+    // 修改建议
+    @ApiModelProperty("修改建议")
+    private String suggestion;
+
     /**
      * 在办 -> 待办
      */
@@ -60,6 +64,7 @@ public class UpdateEventsInfoDTO {
      * 网信办用户处理待办事件
      */
     public void updateWaitToEventsInfoForAdminUser() {
+        setProcessByUser(getUserId());
         setEventType("在办"); // 事件类型：在办
         setEventsStatus("在办"); // 待办 -> 在办
         setEventStatusInstitution("待办"); // 待通告 -> 待办
@@ -70,10 +75,32 @@ public class UpdateEventsInfoDTO {
      * 机构用户处理待办事件
      */
     public void updateWaitToEventsInfoForInsUser() {
+        setProcessByUser(getUserId());
         setEventType("在办"); // 事件类型：在办
         setEventsStatus("待办"); // 网信办事件状态：在办 -> 待办
         setEventStatusInstitution("在办"); // 机构用户事件状态：待办 -> 在办
         setProcessStatus("审核中"); // 处理状态：待处理 -> 审核中
+    }
+
+
+    /**
+     * 网信办审核通过事件
+     */
+    public void audit(){
+        setEventsStatus("办结"); // 网信办事件状态：待办 -> 办结
+        setEventStatusInstitution("办结"); // 机构事件状态： 在办 -> 办结
+        setProcessStatus("审核通过"); // 事件处理状态：待审核 -> 审核通过
+        setEventType("办结"); // 事件类型：办结
+    }
+
+    /**
+     * 网信办审核不通过事件
+     */
+    public void rejectAudit(){
+        setEventsStatus("在办"); // 网信办事件状态：待办 -> 在办
+        setEventStatusInstitution("待办"); // 机构事件状态： 在办 -> 待办
+        setProcessStatus("修改中"); // 事件处理状态：待审核 -> 修改中
+        setEventType("在办"); // 事件类型：在办
     }
 
 }

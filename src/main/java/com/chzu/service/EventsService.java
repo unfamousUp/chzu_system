@@ -29,5 +29,11 @@ public interface EventsService {
 
     R<Boolean> rollBackEventsInfo(UpdateEventsInfoDTO updateEventsInfoDTO);
 
+    R<Boolean> rejectAuditEventsInfo(UpdateEventsInfoDTO updateEventsInfoDTO);
+
+    R<Boolean> auditEventsInfo(UpdateEventsInfoDTO updateEventsInfoDTO);
+
     R<Boolean> addEventsInfo(AddEventsInfoDTO addEventsInfoDTO);
+
+    R<List<EventsWithOrgVo>> getDoneToEventsInfo(Integer userId);
 }

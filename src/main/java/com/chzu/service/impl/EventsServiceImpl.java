@@ -121,15 +121,34 @@ public class EventsServiceImpl implements EventsService {
     public R<List<EventsWithOrgVo>> getAtToEventsInfo(Integer userId) {
         String status = "在办";
         String processStatus = "待处理";
+        String processStatus2 = "修改中";
         // 判断是否为网信办用户
         jwtUser = (JwtUser) SecurityUtils.getSubject().getPrincipal();
         if (jwtUser.getIsAdmin()) {
-            List<Events> events = eventsMapper.getAtToDoEventsForAdminUser(userId, status, processStatus);
+            List<Events> events = eventsMapper.getAtToDoEventsForAdminUser(userId, status, processStatus, processStatus2);
             if (events.size() != 0) return R.buildR(Status.OK, "success", EventsWithOrgVo.convertToEventsWithOrgVoList(events));
         }
         // 判断是否为机构用户
         if (jwtUser.getIsInstitution()) {
             List<Events> events = eventsMapper.getToDoEventsForInstitutionUser(userId, status);
+            if (events.size() != 0) return R.buildR(Status.OK, "success", EventsWithOrgVo.convertToEventsWithOrgVoList(events));
+        }
+        return R.buildR(Status.SYSTEM_ERROR, "查询失败");
+    }
+
+    @Override
+    public R<List<EventsWithOrgVo>> getDoneToEventsInfo(Integer userId) {
+        String status = "办结";
+        String processStatus = "审核通过";
+        // 判断是否为网信办用户
+        jwtUser = (JwtUser) SecurityUtils.getSubject().getPrincipal();
+        if (jwtUser.getIsAdmin()) {
+            List<Events> events = eventsMapper.getDoneToEventsForAdminUser(userId, status, processStatus);
+            if (events.size() != 0) return R.buildR(Status.OK, "success", EventsWithOrgVo.convertToEventsWithOrgVoList(events));
+        }
+        // 判断是否为机构用户
+        if (jwtUser.getIsInstitution()) {
+            List<Events> events = eventsMapper.getDoneToEventsForInstitutionUser(userId, status, processStatus);
             if (events.size() != 0) return R.buildR(Status.OK, "success", EventsWithOrgVo.convertToEventsWithOrgVoList(events));
         }
         return R.buildR(Status.SYSTEM_ERROR, "查询失败");
@@ -171,5 +190,42 @@ public class EventsServiceImpl implements EventsService {
             return R.buildR(Status.OK, "success", !(result == 0));
         }
         return R.buildR(Status.SYSTEM_ERROR,"重置失败");
+    }
+
+    /**
+     * 网信办审核事件信息：审核通过
+     * @param updateEventsInfoDTO
+     * @return
+     */
+    @Override
+    public R<Boolean> auditEventsInfo(UpdateEventsInfoDTO updateEventsInfoDTO) {
+        // 判断是网信办还是机构用户
+        jwtUser = (JwtUser) SecurityUtils.getSubject().getPrincipal();
+        // 网信办用户
+        if(jwtUser.getIsAdmin()){
+            updateEventsInfoDTO.audit();
+            Integer result = eventsMapper.updateEventsInfoForAdminUser(updateEventsInfoDTO);
+            return R.buildR(Status.OK,"更新事件成功",!(result == 0));
+        }
+        return R.buildR(Status.SYSTEM_ERROR,"修改失败");
+    }
+
+    /**
+     * 网信办审核事件信息：审核不通过
+     * @param updateEventsInfoDTO
+     * @return
+     */
+    @Override
+    public R<Boolean> rejectAuditEventsInfo(UpdateEventsInfoDTO updateEventsInfoDTO) {
+        // 判断是网信办还是机构用户
+        jwtUser = (JwtUser) SecurityUtils.getSubject().getPrincipal();
+        // 网信办用户
+        if(jwtUser.getIsAdmin()){
+            updateEventsInfoDTO.rejectAudit();
+            redisService.saveSuggestion(updateEventsInfoDTO.getProcessByUser(),updateEventsInfoDTO.getSuggestion());
+            Integer result = eventsMapper.updateEventsInfoForAdminUser(updateEventsInfoDTO);
+            if (result!=0) return R.buildR(Status.OK,"更新事件成功");
+        }
+        return R.buildR(Status.SYSTEM_ERROR,"修改失败");
     }
 }

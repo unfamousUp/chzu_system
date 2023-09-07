@@ -19,7 +19,7 @@ import java.util.Map;
 public class RedisTest {
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String,String> redisTemplate;
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
@@ -33,8 +33,12 @@ public class RedisTest {
         //
         // Object name = stringRedisTemplate.opsForValue().get("name");
         // log.info("{}",name);
-        redisService.saveUserContent(2,"aaaa");
-        R<String> userContent = redisService.getUserContent(2);
+        // redisService.saveUserContent(2,"aaaa");
+        // R<String> userContent = redisService.getUserContent(2);
+        // redisTemplate.opsForValue().set("A:B:test:key3","value3");
+        redisService.saveUserContent(101,"textareaaa");
+        R<String> userContent = redisService.getUserContent(101);
+        log.info("{}",userContent);
     }
 
     @Test

@@ -11,8 +11,8 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 /**
  * 用户自定义的配置类和@Bean会被优先加载
  */
-@Configuration
-public class RedisConfig {
+// @Configuration
+// public class RedisConfig {
 
     // @Bean
     // public RedisTemplate<String,Object> redisTemplate(RedisConnectionFactory redisConnectionFactory){
@@ -32,4 +32,4 @@ public class RedisConfig {
     //     return template;
     // }
 
-}
+// }

@@ -23,4 +23,10 @@ public class RedisController {
         return redisService.getUserContent(userId);
     }
 
+    @GetMapping("/getSuggestionByUserId")
+    @ApiOperation("根据用户id获取修改信息")
+    R<String> getSuggestionByUserId(@RequestParam("userId")Integer userId){
+        return redisService.getSuggestion(userId);
+    }
+
 }
