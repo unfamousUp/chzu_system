@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,6 +30,7 @@ public class AddEventsInfoDTO extends Events {
         setProcessStatus("待通告");
         setEventType("待通告");
         setEventStatusInstitution("待通知");
+        setCreateTime(new Date());
     }
 
     @Override

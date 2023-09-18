@@ -6,9 +6,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.chzu.dto.RoleDTO;
 import com.chzu.dto.UpdateEventsInfoDTO;
 import com.chzu.entity.*;
+import com.chzu.exception.CustomDateParseException;
 import com.chzu.mapper.*;
 import com.chzu.service.EventsService;
 import com.chzu.utils.ConvertToUUID;
+import com.chzu.utils.DateUtil;
 import com.chzu.utils.JwtUtil;
 import com.chzu.utils.R;
 import com.chzu.vo.EventsWithOrgVo;
@@ -29,6 +31,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.Year;
 import java.util.*;
 
@@ -92,9 +97,12 @@ class ChzuSystemApplicationTests {
     }
 
     @Test
-    void Test(){
-        List<Events> events = eventsMapper.getToDoEventsByOrgNameForAdminUser("待办", 1, "滁州");
-        System.out.println(events);
+    void Test() throws ParseException {
+        eventsMapper.updateTest(new Date());
+        Date createTimeDate = eventsMapper.getCreateTimeDate();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formatCreateTimeDate = dateFormat.format(createTimeDate);
+        log.info("formatCreateTimeDate={}",formatCreateTimeDate);
     }
 
     @Test

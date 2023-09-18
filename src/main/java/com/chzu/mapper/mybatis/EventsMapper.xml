@@ -4,8 +4,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.chzu.mapper.EventsMapper">
     <insert id="addEventsInfo" parameterType="events">
-        INSERT INTO events (event_id, event_type, event_status, event_status_institution, processed_by_user, process_status, assigned_to_organization, assigned_by_user, approved_by_user, emergency_degree, datasource, Illegal_content)
-        VALUES (#{eventId}, #{eventType}, #{eventStatus}, #{eventStatusInstitution}, #{processByUser}, #{processStatus}, #{assignedToOrganization}, #{assignedByUser}, #{approvedByUser}, #{emergencyDegree}, #{datasource}, #{illegalContent})
+        INSERT INTO events (event_id, event_type, event_status, event_status_institution, processed_by_user,
+                            process_status, assigned_to_organization, assigned_by_user, approved_by_user,
+                            emergency_degree, datasource, Illegal_content)
+        VALUES (#{eventId}, #{eventType}, #{eventStatus}, #{eventStatusInstitution}, #{processByUser}, #{processStatus},
+                #{assignedToOrganization}, #{assignedByUser}, #{approvedByUser}, #{emergencyDegree}, #{datasource},
+                #{illegalContent})
     </insert>
     <!--
         更新网信办事件状态：待办 -> 在办
@@ -15,54 +19,62 @@
     -->
     <update id="updateEventsInfoForAdminUser">
         update events
-        set event_status = #{eventsStatus},
+        set event_status             = #{eventsStatus},
             event_status_institution = #{eventStatusInstitution},
-            event_type = #{eventType},
-            process_status = #{processStatus},
-            processed_by_user = #{processByUser}
+            event_type               = #{eventType},
+            process_status           = #{processStatus},
+            processed_by_user        = #{processByUser}
         where event_id = #{eventId}
     </update>
 
     <update id="updateEventsInfoForInstitutionUser">
         update events
-        set event_status = #{eventsStatus},
+        set event_status             = #{eventsStatus},
             event_status_institution = #{eventStatusInstitution},
-            event_type = #{eventType},
-            process_status = #{processStatus}
+            event_type               = #{eventType},
+            process_status           = #{processStatus}
         where event_id = #{eventId}
     </update>
 
     <update id="resetToDoEventsInfo">
         update events
-        set event_status = #{eventsStatus},
+        set event_status             = #{eventsStatus},
             event_status_institution = #{eventStatusInstitution},
-            event_type = #{eventType},
-            process_status = #{processStatus},
-            processed_by_user = #{userId}
+            event_type               = #{eventType},
+            process_status           = #{processStatus},
+            processed_by_user        = #{userId}
         where event_id = #{eventId}
     </update>
 
     <update id="rollBackEventsInfo">
         update events
-        set event_status = #{eventsStatus},
+        set event_status             = #{eventsStatus},
             event_status_institution = #{eventStatusInstitution},
-            event_type = #{eventType},
-            process_status = #{processStatus},
-            processed_by_user = #{userId}
+            event_type               = #{eventType},
+            process_status           = #{processStatus},
+            processed_by_user        = #{userId}
         where event_id = #{eventId}
+    </update>
+    <update id="updateTest">
+        update events set create_time = #{createTime} where event_id = 101
     </update>
 
     <select id="getEventsByAssignedUserId" resultType="com.chzu.entity.Events">
-        select * from events where assigned_by_user = #{userId}
+        select *
+        from events
+        where assigned_by_user = #{userId}
     </select>
 
     <select id="getEventsByProcessUserId" resultType="com.chzu.entity.Events">
-        select * from events where processed_by_user = #{userId}
+        select *
+        from events
+        where processed_by_user = #{userId}
     </select>
 
     <select id="getToDoEventsForInstitutionUser" resultMap="toDoEventsForInstitutionUser">
         select *
-        from events,organizations org
+        from events,
+             organizations org
         where event_status_institution = #{eventStatusInstitution}
           and processed_by_user = #{userId}
           and assigned_to_organization = org.org_id
@@ -86,7 +98,7 @@
         <result property="illegalContent" column="illegal_content"></result>
         <association property="organizations" javaType="Organizations">
             <!-- Map Organizations table columns -->
-            <id property="orgId" column="org_id" />
+            <id property="orgId" column="org_id"/>
             <result property="orgName" column="org_name"></result>
             <result property="orgDomainName" column="org_domain_name"></result>
             <result property="orgType" column="org_type"></result>
@@ -95,7 +107,8 @@
 
     <select id="getToDoEventsForAdminUser" resultMap="toDoEventsForAdminUser">
         select *
-        from events,organizations org
+        from events,
+             organizations org
         where event_status = #{eventStatus}
           and assigned_by_user = #{userId}
           and assigned_to_organization = org.org_id
@@ -119,7 +132,7 @@
         <result property="illegalContent" column="illegal_content"></result>
         <association property="organizations" javaType="Organizations">
             <!-- Map Organizations table columns -->
-            <id property="orgId" column="org_id" />
+            <id property="orgId" column="org_id"/>
             <result property="orgName" column="org_name"></result>
             <result property="orgDomainName" column="org_domain_name"></result>
             <result property="orgType" column="org_type"></result>
@@ -128,7 +141,8 @@
 
     <select id="getAtToDoEventsForAdminUser" resultMap="toAtToDoEventsForAdminUser">
         select *
-        from events,organizations org
+        from events,
+             organizations org
         where event_status = #{eventStatus}
           and (process_status = #{processStatus} or process_status = #{processStatus2})
           and assigned_by_user = #{userId}
@@ -153,23 +167,23 @@
         <result property="illegalContent" column="illegal_content"></result>
         <association property="organizations" javaType="Organizations">
             <!-- Map Organizations table columns -->
-            <id property="orgId" column="org_id" />
+            <id property="orgId" column="org_id"/>
             <result property="orgName" column="org_name"></result>
             <result property="orgDomainName" column="org_domain_name"></result>
             <result property="orgType" column="org_type"></result>
         </association>
     </resultMap>
 
-    <select id="getToDoEventsByOrgNameForAdminUser" resultMap="toDoEventsByOrgNameForAdminUser">
+    <select id="getAtToDoEventsForInstitutionUser" resultMap="toAtToDoEventsForInstitutionUser">
         select *
-        from events,organizations org
-        where event_status = #{eventStatus}
+        from events,
+             organizations org
+        where event_status_institution = #{eventStatusInstitution}
           and assigned_by_user = #{userId}
           and assigned_to_organization = org.org_id
-          and org.org_name LIKE CONCAT('%', #{orgName}, '%')
     </select>
 
-    <resultMap id="toDoEventsByOrgNameForAdminUser" type="Events">
+    <resultMap id="toAtToDoEventsForInstitutionUser" type="Events">
         <result property="eventId" column="event_id"></result>
         <result property="eventName" column="event_name"></result>
         <result property="eventType" column="event_type"></result>
@@ -187,7 +201,101 @@
         <result property="illegalContent" column="illegal_content"></result>
         <association property="organizations" javaType="Organizations">
             <!-- Map Organizations table columns -->
-            <id property="orgId" column="org_id" />
+            <id property="orgId" column="org_id"/>
+            <result property="orgName" column="org_name"></result>
+            <result property="orgDomainName" column="org_domain_name"></result>
+            <result property="orgType" column="org_type"></result>
+        </association>
+    </resultMap>
+
+    <select id="getWaitToEventsInfoByDynamicQueryForAdminUser" resultMap="dynamicQueryForAdminUser">
+        select *
+        from events,organizations org
+        where 1 = 1
+        and assigned_to_organization = org.org_id
+        <if test="eventStatus != null">
+            and event_status = #{eventStatus}
+        </if>
+        <if test="userId != null">
+            and assigned_by_user = #{userId}
+        </if>
+        <if test="orgName != null">
+            and org_name LIKE CONCAT('%', #{orgName}, '%')
+        </if>
+        <if test="illegalContent != null">
+            and illegal_content = #{illegalContent}
+        </if>
+        <if test="processStatus != null">
+            and process_status = #{processStatus}
+        </if>
+    </select>
+
+    <resultMap id="dynamicQueryForAdminUser" type="Events">
+        <result property="eventId" column="event_id"></result>
+        <result property="eventName" column="event_name"></result>
+        <result property="eventType" column="event_type"></result>
+        <result property="eventStatus" column="event_status"></result>
+        <result property="eventStatusInstitution" column="event_status_institution"></result>
+        <result property="processByUser" column="process_by_user"></result>
+        <result property="processStatus" column="process_status"></result>
+        <result property="assignedToOrganization" column="assigned_to_organization"></result>
+        <result property="assignedByUser" column="assigned_by_user"></result>
+        <result property="approvedByUser" column="approved_by_user"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="updateTime" column="update_time"></result>
+        <result property="emergencyDegree" column="emergency_degree"></result>
+        <result property="datasource" column="datasource"></result>
+        <result property="illegalContent" column="illegal_content"></result>
+        <association property="organizations" javaType="Organizations">
+            <!-- Map Organizations table columns -->
+            <id property="orgId" column="org_id"/>
+            <result property="orgName" column="org_name"></result>
+            <result property="orgDomainName" column="org_domain_name"></result>
+            <result property="orgType" column="org_type"></result>
+        </association>
+    </resultMap>
+
+    <select id="getWaitToEventsInfoByDynamicQueryForInstitutionUser" resultMap="dynamicQueryForInstitutionUser">
+        select *
+        from events,organizations org
+        where 1 = 1
+        and assigned_to_organization = org.org_id
+        <if test="eventStatusInstitution != null">
+            and event_status_institution = #{eventStatusInstitution}
+        </if>
+        <if test="userId != null">
+            and processed_by_user = #{userId}
+        </if>
+        <if test="orgName != null">
+            and org_name LIKE CONCAT('%', #{orgName}, '%')
+        </if>
+        <if test="illegalContent != null">
+            and illegal_content = #{illegalContent}
+        </if>
+        <if test="processStatus != null">
+            and process_status = #{processStatus}
+        </if>
+    </select>
+
+    <resultMap id="dynamicQueryForInstitutionUser" type="Events">
+        <result property="eventId" column="event_id"></result>
+        <result property="eventName" column="event_name"></result>
+        <result property="eventType" column="event_type"></result>
+        <result property="eventStatus" column="event_status"></result>
+        <result property="eventStatusInstitution" column="event_status_institution"></result>
+        <result property="processByUser" column="process_by_user"></result>
+        <result property="processStatus" column="process_status"></result>
+        <result property="assignedToOrganization" column="assigned_to_organization"></result>
+        <result property="assignedByUser" column="assigned_by_user"></result>
+        <result property="approvedByUser" column="approved_by_user"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="updateTime" column="update_time"></result>
+        <result property="emergencyDegree" column="emergency_degree"></result>
+        <result property="datasource" column="datasource"></result>
+        <result property="illegalContent" column="illegal_content"></result>
+        <association property="organizations" javaType="Organizations">
+            <!-- Map Organizations table columns -->
+            <id property="orgId" column="org_id"/>
             <result property="orgName" column="org_name"></result>
             <result property="orgDomainName" column="org_domain_name"></result>
             <result property="orgType" column="org_type"></result>
@@ -196,7 +304,8 @@
 
     <select id="getDoneToEventsForAdminUser" resultMap="doneToEventsForAdminUser">
         select *
-        from events,organizations org
+        from events,
+             organizations org
         where event_status = #{eventStatus}
           and process_status = #{processStatus}
           and assigned_by_user = #{userId}
@@ -221,7 +330,7 @@
         <result property="illegalContent" column="illegal_content"></result>
         <association property="organizations" javaType="Organizations">
             <!-- Map Organizations table columns -->
-            <id property="orgId" column="org_id" />
+            <id property="orgId" column="org_id"/>
             <result property="orgName" column="org_name"></result>
             <result property="orgDomainName" column="org_domain_name"></result>
             <result property="orgType" column="org_type"></result>
@@ -230,10 +339,15 @@
 
     <select id="getDoneToEventsForInstitutionUser" resultMap="doneToEventsForInstitutionUser">
         select *
-        from events,organizations org
+        from events,
+             organizations org
         where event_status_institution = #{eventStatusInstitution}
           and processed_by_user = #{userId}
           and assigned_to_organization = org.org_id
+    </select>
+
+    <select id="getCreateTimeDate" resultType="java.util.Date">
+        select create_time from events where event_id = 101
     </select>
 
     <resultMap id="doneToEventsForInstitutionUser" type="Events">
@@ -254,7 +368,7 @@
         <result property="illegalContent" column="illegal_content"></result>
         <association property="organizations" javaType="Organizations">
             <!-- Map Organizations table columns -->
-            <id property="orgId" column="org_id" />
+            <id property="orgId" column="org_id"/>
             <result property="orgName" column="org_name"></result>
             <result property="orgDomainName" column="org_domain_name"></result>
             <result property="orgType" column="org_type"></result>

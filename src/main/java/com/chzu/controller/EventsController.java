@@ -46,11 +46,11 @@ public class EventsController {
     /**
      * 获取待办事件信息
      */
-    @GetMapping("/events/getWaitToEventsInfoByOrgName")
-    @ApiOperation("获取待办事件信息")
-    public R<List<EventsWithOrgVo>> getWaitToEventsInfoByInstitutionName(@RequestParam("userId")Integer userId,@RequestParam("orgName")String orgName){
-        log.info("getWaitToEventsInfoByInstitutionName().userId={},orgName={}",userId,orgName);
-        return eventsService.getWaitToEventsInfoByOrgName(userId,orgName);
+    @GetMapping("/events/getWaitToEventsInfoByDynamicQuery")
+    @ApiOperation("动态查询：获取待办事件信息")
+    public R<List<EventsWithOrgVo>> getWaitToEventsInfoByDynamicQuery(@RequestParam("userId")Integer userId,@RequestParam("orgName")String orgName,@RequestParam("illegalContent") String illegalContent, @RequestParam("processStatus")String processStatus){
+        log.info("getWaitToEventsInfoByDynamicQuery().userId={},orgName={},illegalContent{},processStatus={}",userId,orgName,illegalContent,processStatus);
+        return eventsService.getWaitToEventsInfoByDynamicQuery(userId,orgName,illegalContent,processStatus);
     }
 
     /**

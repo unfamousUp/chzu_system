@@ -1,13 +1,10 @@
 package com.chzu.service;
 
 import com.chzu.dto.AddEventsInfoDTO;
-import com.chzu.dto.RoleDTO;
 import com.chzu.dto.UpdateEventsInfoDTO;
 import com.chzu.entity.Events;
 import com.chzu.utils.R;
 import com.chzu.vo.EventsWithOrgVo;
-import com.chzu.vo.RoleVo;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -23,7 +20,7 @@ public interface EventsService {
 
     R<List<Events>> getEventsByProcessUserId(Integer userId);
 
-    R<List<EventsWithOrgVo>> getWaitToEventsInfoByOrgName(Integer userId, String orgName);
+    R<List<EventsWithOrgVo>> getWaitToEventsInfoByDynamicQuery(Integer userId, String orgName, String illegalContent, String processStatus);
 
     R<Boolean> resetToDoEventsInfo(UpdateEventsInfoDTO updateEventsInfoDTO);
 

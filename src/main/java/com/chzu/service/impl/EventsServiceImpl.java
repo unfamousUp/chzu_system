@@ -1,7 +1,6 @@
 package com.chzu.service.impl;
 
 import com.chzu.dto.AddEventsInfoDTO;
-import com.chzu.dto.RoleDTO;
 import com.chzu.dto.UpdateEventsInfoDTO;
 import com.chzu.entity.Events;
 import com.chzu.mapper.EventsMapper;
@@ -11,7 +10,6 @@ import com.chzu.utils.JwtUser;
 import com.chzu.utils.R;
 import com.chzu.utils.Status;
 import com.chzu.vo.EventsWithOrgVo;
-import com.chzu.vo.RoleVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,24 +87,31 @@ public class EventsServiceImpl implements EventsService {
     /**
      * 根据机构名称查询待办事件信息
      * @param userId
+     * @param name
+     * @param illegalContent
      * @param orgName
      * @return
      */
     @Override
-    public R<List<EventsWithOrgVo>> getWaitToEventsInfoByOrgName(Integer userId, String orgName) {
+    public R<List<EventsWithOrgVo>> getWaitToEventsInfoByDynamicQuery(Integer userId, String orgName, String illegalContent, String processStatus) {
         String status = "待办";
+        // log.info("orgName={}",orgName);
+        // log.info("orgName是否为空：{}",orgName.isEmpty());
+        if (orgName.isEmpty()) orgName = null;
+        if(illegalContent.isEmpty()) illegalContent = null;
+        if (processStatus.isEmpty()) processStatus = null;
         // QueryWrapper<Events> eventsQueryWrapper = new QueryWrapper<>();
         // QueryWrapper<Organizations> organizationsQueryWrapper = new QueryWrapper<>();
         // 判断是否为网信办用户
         jwtUser = (JwtUser) SecurityUtils.getSubject().getPrincipal();
         if (jwtUser.getIsAdmin()) {
             // List<Events> events = eventsMapper.getToDoEventsForAdminUser(userId, status);
-            List<Events> events = eventsMapper.getToDoEventsByOrgNameForAdminUser(status,userId,orgName);
+            List<Events> events = eventsMapper.getWaitToEventsInfoByDynamicQueryForAdminUser(status,userId,orgName,illegalContent,processStatus);
             if (events.size() != 0) return R.buildR(Status.OK, "success", EventsWithOrgVo.convertToEventsWithOrgVoList(events));
         }
         // 判断是否为机构用户
         if (jwtUser.getIsInstitution()) {
-            List<Events> events = eventsMapper.getToDoEventsForInstitutionUser(userId, status);
+            List<Events> events = eventsMapper.getWaitToEventsInfoByDynamicQueryForInstitutionUser(status,userId,orgName,illegalContent,processStatus);
             if (events.size() != 0) return R.buildR(Status.OK, "success", EventsWithOrgVo.convertToEventsWithOrgVoList(events));
         }
         return R.buildR(Status.SYSTEM_ERROR, "查询失败");
@@ -130,7 +135,7 @@ public class EventsServiceImpl implements EventsService {
         }
         // 判断是否为机构用户
         if (jwtUser.getIsInstitution()) {
-            List<Events> events = eventsMapper.getToDoEventsForInstitutionUser(userId, status);
+            List<Events> events = eventsMapper.getAtToDoEventsForInstitutionUser(userId, status);
             if (events.size() != 0) return R.buildR(Status.OK, "success", EventsWithOrgVo.convertToEventsWithOrgVoList(events));
         }
         return R.buildR(Status.SYSTEM_ERROR, "查询失败");

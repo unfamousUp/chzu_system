@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.chzu.entity.Events;
+import com.chzu.utils.DateUtil;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -46,10 +47,10 @@ public class EventsWithOrgVo {
     private String assignedToOrganizationName;
 
     @ApiModelProperty("事件创建时间")
-    private Date createTime;
+    private String createTime;
 
     @ApiModelProperty("事件更新时间")
-    private Date updateTime;
+    private String updateTime;
 
     @ApiModelProperty("发布该事件的网信办用户ID")
     private Integer assignedByUser = 1; // 默认为wxb用户
@@ -94,8 +95,8 @@ public class EventsWithOrgVo {
         this.processByUser = events.getProcessByUser();
         this.processStatus = events.getProcessStatus();
         this.assignedToOrganization = events.getAssignedToOrganization();
-        this.createTime = events.getCreateTime();
-        this.updateTime = events.getUpdateTime();
+        this.createTime = DateUtil.getFormattedDateTime(events.getCreateTime());
+        // this.updateTime = DateUtil.getFormattedDateTime(events.getUpdateTime());
         this.assignedByUser = events.getAssignedByUser();
         this.approvedByUser = events.getApprovedByUser();
         this.approvalStatus = events.getApprovalStatus();

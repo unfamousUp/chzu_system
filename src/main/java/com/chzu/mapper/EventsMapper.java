@@ -8,6 +8,7 @@ import com.chzu.entity.Events;
 import com.chzu.utils.R;
 import org.apache.ibatis.annotations.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -33,22 +34,28 @@ public interface EventsMapper extends BaseMapper<Events> {
     List<Events> getEventsByProcessUserId(@Param("userId") Integer userId);
 
     /**
-     * 根据机构名称获取网信办用户待办事件信息
-     *
+     * 动态查询待办事件信息
      * @param eventStatus
      * @param userId
      * @param orgName
+     * @param illegalContent
+     * @param processStatus
      * @return
      */
-    // @Select("SELECT e.* FROM events e " +
-    //         "LEFT JOIN organizations org ON e.assigned_to_organization = org.org_id " +
-    //         "WHERE e.event_status = #{eventStatus} " +
-    //         "AND e.assigned_by_user = #{userId} " +
-    //         "AND org.org_name LIKE CONCAT('%', #{orgName}, '%')")
-    List<Events> getToDoEventsByOrgNameForAdminUser(
+    List<Events> getWaitToEventsInfoByDynamicQueryForAdminUser(
             @Param("eventStatus") String eventStatus,
             @Param("userId") Integer userId,
-            @Param("orgName") String orgName
+            @Param("orgName") String orgName,
+            @Param("illegalContent") String illegalContent,
+            @Param("processStatus") String processStatus
+    );
+
+    List<Events> getWaitToEventsInfoByDynamicQueryForInstitutionUser(
+            @Param("eventStatusInstitution") String eventStatusInstitution,
+            @Param("userId") Integer userId,
+            @Param("orgName") String orgName,
+            @Param("illegalContent") String illegalContent,
+            @Param("processStatus") String processStatus
     );
 
     /**
@@ -77,6 +84,8 @@ public interface EventsMapper extends BaseMapper<Events> {
      * @return
      */
     List<Events> getAtToDoEventsForAdminUser(@Param("userId") Integer userId, @Param("eventStatus") String eventStatus, @Param("processStatus") String processStatus,@Param("processStatus2") String processStatus2);
+
+    List<Events> getAtToDoEventsForInstitutionUser(@Param("userId") Integer userId, @Param("eventStatusInstitution") String eventStatusInstitution);
 
 
     List<Events> getDoneToEventsForInstitutionUser(@Param("userId") Integer userId, @Param("eventStatusInstitution") String eventStatusInstitution, @Param("processStatus") String processStatus);
@@ -134,4 +143,9 @@ public interface EventsMapper extends BaseMapper<Events> {
      * @return
      */
     Integer addEventsInfo(AddEventsInfoDTO addEventsInfoDTO);
+
+    Integer updateTest(@Param("createTime")Date createTime);
+
+    Date getCreateTimeDate();
+
 }
