@@ -8,6 +8,7 @@ import com.chzu.mapper.EventsMapper;
 import com.chzu.mapper.OrganizationsMapper;
 import com.chzu.utils.ExcelListener;
 import com.chzu.utils.OrgExcelListener;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import java.io.InputStream;
 import java.util.List;
 
 @RestController
+@Api(tags="文件上传")
 public class FileUploadController {
     @Autowired
     EventsMapper eventsMapper;

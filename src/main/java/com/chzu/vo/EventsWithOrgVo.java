@@ -95,7 +95,7 @@ public class EventsWithOrgVo {
         this.processByUser = events.getProcessByUser();
         this.processStatus = events.getProcessStatus();
         this.assignedToOrganization = events.getAssignedToOrganization();
-        this.createTime = DateUtil.getFormattedDateTime(events.getCreateTime());
+        // this.createTime = DateUtil.getFormattedDateTime(events.getCreateTime());
         // this.updateTime = DateUtil.getFormattedDateTime(events.getUpdateTime());
         this.assignedByUser = events.getAssignedByUser();
         this.approvedByUser = events.getApprovedByUser();

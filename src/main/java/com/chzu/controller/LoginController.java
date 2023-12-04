@@ -8,6 +8,7 @@ import com.chzu.service.UserService;
 import com.chzu.shiro.JwtToken;
 import com.chzu.utils.*;
 import com.chzu.vo.UserLoginVo;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
+@Api(tags = "登录接口")
 public class LoginController {
 
     @Autowired
@@ -30,60 +32,60 @@ public class LoginController {
     private UserMapper userMapper;
 
     @PostMapping("/user/login")
-    @ApiOperation("登录")
-    public Result<UserLoginVo> login(@ApiParam("UserLoginDTO") UserLoginDTO userLoginDTO){
-        log.info("登录信息,{}",userLoginDTO);
+    // @ApiOperation("登录")
+    public Result<UserLoginVo> login(@ApiParam("UserLoginDTO") UserLoginDTO userLoginDTO) {
+        log.info("登录信息,{}", userLoginDTO);
         Result<UserLoginVo> userLoginVoResult = loginService.login(userLoginDTO);
         return userLoginVoResult;
     }
 
     @GetMapping("/user/loginPage")
-    @ApiOperation("登录页面")
-    public String indexPage(){
+    // @ApiOperation("登录页面")
+    public String indexPage() {
         return "login-page";
     }
 
     @GetMapping("/user/testPage")
-    @ApiOperation("登录页面")
-    public String testPage(){
+    // @ApiOperation("登录页面")
+    public String testPage() {
         return "test-page";
     }
 
     @RequiresRoles("admin")
     @GetMapping("/user/userLoginRoles")
-    public String userLoginRoles(){
+    public String userLoginRoles() {
         System.out.println("登录认证验证角色");
         return "验证角色成功";
     }
 
     @PostMapping("/testLogin")
-    @ApiOperation("测试")
-    public R<UserLoginVo> test(@ApiParam("UserLoginDTO")UserLoginDTO userLoginDTO,
+    // @ApiOperation("测试")
+    public R<UserLoginVo> test(@ApiParam("UserLoginDTO") UserLoginDTO userLoginDTO,
                                @ApiParam("接收属性name=rememberMe的单选框的value值")
-                      @RequestParam(defaultValue = "true")boolean rememberMe){
+                               @RequestParam(defaultValue = "true") boolean rememberMe) {
         // 1.获取subject对象
         Subject subject = SecurityUtils.getSubject();
         // 2.封装请求数据到token
-        AuthenticationToken token = new UsernamePasswordToken(userLoginDTO.getUsername(),userLoginDTO.getPassword(),rememberMe);
+        AuthenticationToken token = new UsernamePasswordToken(userLoginDTO.getUsername(), userLoginDTO.getPassword(), rememberMe);
         // 3.调用login方法进行登录验证
         try {
             subject.login(token);
-            log.info("{}",subject.getSession().getAttribute("user"));
+            log.info("{}", subject.getSession().getAttribute("user"));
             User user = (User) subject.getSession().getAttribute("user");
-            UserLoginVo userLoginVo = new UserLoginVo(user,"token");
+            UserLoginVo userLoginVo = new UserLoginVo(user, "token");
 
-            return R.buildR(Status.OK,"登录成功",userLoginVo);
+            return R.buildR(Status.OK, "登录成功", userLoginVo);
         } catch (AuthenticationException e) {
             e.printStackTrace();
-            return R.buildR(Status.SYSTEM_ERROR,"登录失败");
+            return R.buildR(Status.SYSTEM_ERROR, "登录失败");
         }
     }
 
     @PostMapping("/testTokenLogin")
-    @ApiOperation("测试testTokenLogin")
-    public R<UserLoginVo> testTokenLogin(@ApiParam("UserLoginDTO")UserLoginDTO userLoginDTO,
-                               @ApiParam("接收属性name=rememberMe的单选框的value值")
-                               @RequestParam(defaultValue = "true")boolean rememberMe){
+    // @ApiOperation("测试testTokenLogin")
+    public R<UserLoginVo> testTokenLogin(@ApiParam("UserLoginDTO") UserLoginDTO userLoginDTO,
+                                         @ApiParam("接收属性name=rememberMe的单选框的value值")
+                                         @RequestParam(defaultValue = "true") boolean rememberMe) {
         R<UserLoginVo> r = null;
         // 1.获取subject对象
         Subject subject = SecurityUtils.getSubject();
@@ -98,24 +100,25 @@ public class LoginController {
         try {
             // subject.login(jwtToken);
             // r = R.buildR(Status.SYSTEM_ERROR,"登录成功",new UserLoginVo(new User(),token));
-        } catch (UnknownAccountException e){
-            r = R.buildR(Status.SYSTEM_ERROR,"无效用户，用户不存在");
+        } catch (UnknownAccountException e) {
+            r = R.buildR(Status.SYSTEM_ERROR, "无效用户，用户不存在");
             e.printStackTrace();
-        } catch (IncorrectCredentialsException e){
-           r = R.buildR(Status.SYSTEM_ERROR,"密码输入错误");
+        } catch (IncorrectCredentialsException e) {
+            r = R.buildR(Status.SYSTEM_ERROR, "密码输入错误");
             e.printStackTrace();
-        } catch (ExpiredCredentialsException e){
-            r = R.buildR(Status.SYSTEM_ERROR,"token过期，请重新登录");
+        } catch (ExpiredCredentialsException e) {
+            r = R.buildR(Status.SYSTEM_ERROR, "token过期，请重新登录");
             e.printStackTrace();
         } finally {
             return r;
         }
     }
-    @PostMapping("/testUserPasswordTokenLogin")
-    @ApiOperation("测试testUserPasswordTokenLogin")
-    public R<UserLoginVo> testUserPasswordTokenLogin(@ApiParam("UserLoginDTO")UserLoginDTO userLoginDTO,
-                                         @ApiParam("接收属性name=rememberMe的单选框的value值")
-                                         @RequestParam(defaultValue = "true")boolean rememberMe){
+
+    @PostMapping("/userPasswordTokenLogin")
+    @ApiOperation("userPasswordTokenLogin")
+    public R<UserLoginVo> testUserPasswordTokenLogin(@ApiParam("UserLoginDTO") UserLoginDTO userLoginDTO,
+                                                     @ApiParam("接收属性name=rememberMe的单选框的value值")
+                                                     @RequestParam(defaultValue = "true") boolean rememberMe) {
         R<UserLoginVo> r = null;
         // 1.获取subject对象
         Subject subject = SecurityUtils.getSubject();
@@ -124,20 +127,25 @@ public class LoginController {
         try {
             subject.login(usernamePasswordToken);
             JwtUser jwtUser = (JwtUser) subject.getPrincipal();
-            log.info("jwtUser:"+jwtUser);
+            log.info("jwtUser:" + jwtUser);
             // 生成token
             String token = JwtUtil.getJwtToken(jwtUser);
-            r = R.buildR(Status.SYSTEM_ERROR,"登录成功",new UserLoginVo(jwtUser,token));
-        } catch (UnknownAccountException e){
-            r = R.buildR(Status.SYSTEM_ERROR,"无效用户，用户不存在");
+            r = R.buildR(Status.SYSTEM_ERROR, "登录成功", new UserLoginVo(jwtUser, token));
+        } catch (AuthenticationException e) {
+            r = R.buildR(Status.SYSTEM_ERROR, "密码输入错误");
             e.printStackTrace();
-        } catch (IncorrectCredentialsException e){
-            r = R.buildR(Status.SYSTEM_ERROR,"密码输入错误");
-            e.printStackTrace();
-        } catch (ExpiredCredentialsException e){
-            r = R.buildR(Status.SYSTEM_ERROR,"token过期，请重新登录");
-            e.printStackTrace();
-        } finally {
+        }
+        // catch (UnknownAccountException e){
+        //     r = R.buildR(Status.SYSTEM_ERROR,"无效用户，用户不存在");
+        //     e.printStackTrace();
+        // } catch (IncorrectCredentialsException e){
+        //     r = R.buildR(Status.SYSTEM_ERROR,"密码输入错误");
+        //     e.printStackTrace();
+        // } catch (ExpiredCredentialsException e){
+        //     r = R.buildR(Status.SYSTEM_ERROR,"token过期，请重新登录");
+        //     e.printStackTrace();
+        // }
+        finally {
             return r;
         }
     }

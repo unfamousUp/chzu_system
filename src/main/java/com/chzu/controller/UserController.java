@@ -12,6 +12,7 @@ import com.chzu.utils.Status;
 import com.chzu.vo.RoleVo;
 import com.chzu.vo.SelectOptionVo;
 import com.chzu.vo.UserLoginVo;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.security.SecurityUtil;
@@ -29,6 +30,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/user")
+@Api(tags="用户接口")
 public class UserController {
 
     @Autowired
@@ -38,7 +40,7 @@ public class UserController {
     private RoleService roleService;
 
     @GetMapping("/testGetToken")
-    @ApiOperation("测试获取token")
+    // @ApiOperation("测试获取token")
     public String testGetToken(HttpServletRequest httpServlet){
         String token = httpServlet.getHeader("Authorization");
         JwtUser jwtUser = (JwtUser)SecurityUtils.getSubject().getPrincipal();
@@ -49,7 +51,7 @@ public class UserController {
 
 
     @GetMapping("/testGetPermissionInfo")
-    @ApiOperation("测试获取用户权限信息")
+    // @ApiOperation("测试获取用户权限信息")
     public String testGetPermissionInfo(){
         List<String> list = userService.getUserPermissionInfo(roleService.getRolenameByUsername("wxb"));
         list.forEach(System.out::println);
@@ -57,7 +59,7 @@ public class UserController {
     }
 
     @GetMapping("/testDeletePermission")
-    @ApiOperation("测试用户delete权限")
+    // @ApiOperation("测试用户delete权限")
     @RequiresPermissions("user:delete")
     public String testDeletePermission(){
         return "delete:成功";
