@@ -1,7 +1,7 @@
 package com.chzu.controller;
 
+import com.chzu.mapper.BookMapper;
 import com.chzu.mapper.UserMapper;
-import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +15,19 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequestMapping("/test")
-@Api(tags="测试接口")
 public class TestController {
 
     @Autowired
+    private BookMapper bookMapper;
+
+    @Autowired
     private UserMapper userMapper;
+
+    @GetMapping("/myTest")
+    private com.chzu.entity.Book myTest(){
+        com.chzu.entity.Book book = bookMapper.selectBookById(101);
+        return book;
+    }
 
     // 文件上传
     @PostMapping("/upload")

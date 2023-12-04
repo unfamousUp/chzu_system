@@ -12,7 +12,6 @@ import com.chzu.utils.R;
 import com.chzu.utils.Status;
 import com.chzu.vo.EventsWithOrgVo;
 import com.chzu.vo.RoleVo;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
@@ -27,7 +26,6 @@ import java.util.Set;
 
 @RestController
 @Slf4j
-@Api(tags="违规内容督办")
 public class EventsController {
 
     @Autowired
@@ -95,6 +93,7 @@ public class EventsController {
     @GetMapping("/events/testGet")
     @ApiOperation("获取待办事件信息")
     public String testGet(){
+
         return "testGet";
     }
 

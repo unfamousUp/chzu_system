@@ -104,7 +104,7 @@ public class ShiroConfig {
         Map<String, String> filters = new LinkedHashMap<>();
         // 放行路径
         filters.put("/testTokenLogin", "anon");
-        filters.put("/userPasswordTokenLogin","anon");
+        filters.put("/testUserPasswordTokenLogin","anon");
         filters.put("/testLogin", "anon");
         // 放行swagger
         filters.put("/doc.html", "anon");

@@ -30,10 +30,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import java.awt.print.Book;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -57,6 +54,9 @@ class ChzuSystemApplicationTests {
     private SensitiveWordMapper sensitiveWordMapper;
 
     @Autowired
+    private BookMapper bookMapper;
+
+    @Autowired
     EventsService eventsService;
 
     // private Jedis jedis;
@@ -69,8 +69,6 @@ class ChzuSystemApplicationTests {
         // jedis.auth("123456");
         // 选择库
         // jedis.select(0);
-
-        ApplicationContext ioc = new AnnotationConfigApplicationContext();
     }
 
     @Test
@@ -154,6 +152,100 @@ class ChzuSystemApplicationTests {
         roleInfo.forEach(System.out::println);
     }
 
+    @Test
+        // 插入
+    void testInsert() {
+        Book book = new Book();
+        book.setBookName("刀剑神域3");
+        book.setPrice("100");
+        // 如果插入部分数据，其它没设置值的数据库字段需要有默认值
+        int result = bookMapper.insert(book);
+        System.out.println("数据库受影响的行数：" + result);
+        // 获取自增长后的id值，自增长后的id会回填到user对象中
+        System.out.println("id => " + book.getId());
+    }
+
+    @Test
+        // 根据id更新数据
+    void testUpdateById() {
+        Book book = new Book();
+        book.setId(441); // 条件：根据id更新
+        book.setBookName("未闻花名"); // 更新的字段
+        book.setPrice("1000");
+        int result = bookMapper.updateById(book);
+        System.out.println("result = " + result);
+    }
+
+    // 更新数据
+    @Test
+    void testUpdate() {
+        Book book = new Book();
+        book.setBookName("未闻花名"); // 更新的字段
+        book.setPrice("1001");
+        QueryWrapper<Book> wrapper = new QueryWrapper<>();
+        // 查询条件：column数据库字段名,val条件的值。相当于where column = #{val}
+        wrapper.eq("id", 441);
+        int result = bookMapper.update(book, wrapper);
+        System.out.println("result = " + result);
+    }
+
+    /**
+     * 更新数据
+     */
+    @Test
+    void testUpdate2() {
+        UpdateWrapper<Book> wrapper = new UpdateWrapper<>();
+        wrapper.set("book_name", "咒术回战"). // set:更新的字段
+                eq("id", 441); // 更新的条件
+        int result = bookMapper.update(null, wrapper);
+        System.out.println("result = " + result);
+    }
+
+    /**
+     * 根据id删除数据
+     */
+    @Test
+    void testDeleteById() {
+        int result = bookMapper.deleteById(443);
+        System.out.println("result = " + result);
+    }
+
+    /**
+     * 根据map删除数据，多条件之间是and关系
+     */
+    @Test
+    void testDeleteByMap() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("book_name", "刀剑神域2");
+        map.put("price", "100");
+        int result = bookMapper.deleteByMap(map);
+        System.out.println("result = " + result);
+    }
+
+    /**
+     * 根据包装条件查询然后删除
+     */
+    @Test
+    void testDelete() {
+        // QueryWrapper<Book> wrapper = new QueryWrapper<>();
+        // wrapper.eq("id",444);
+
+        Book book = new Book();
+        book.setId(441);
+        QueryWrapper<Book> wrapper = new QueryWrapper<>(book);
+        int result = bookMapper.delete(wrapper);
+        System.out.println("result = " + result);
+    }
+
+    /**
+     * 批量删除
+     */
+    @Test
+    void testDeleteBatchIds() {
+        // 相当于 WHERE id IN ( ? , ? )
+        int result = bookMapper.deleteBatchIds(Arrays.asList(440, 441));
+        System.out.println("result = " + result);
+    }
 
     /**
      * 根据id查询
@@ -177,27 +269,77 @@ class ChzuSystemApplicationTests {
         }
     }
 
+    /**
+     * 根据QueryWrapper条件查询一条数据
+     */
+    @Test
+    void testSelectOne() {
+        QueryWrapper<Book> wrapper = new QueryWrapper<>();
+        // 查询条件
+        wrapper.eq("id", 439);
+        Book book = bookMapper.selectOne(wrapper);
+        System.out.println(book);
+    }
+
+    /**
+     * 查询符合条件的记录条数
+     */
+    @Test
+    void testSelectCount() {
+        QueryWrapper<Book> wrapper = new QueryWrapper<>();
+        // 查询条件：grant than
+        wrapper.gt("id", 300);
+        Integer count = bookMapper.selectCount(wrapper);
+        System.out.println("count = " + count);
+    }
+
+    /**
+     * 查询为list集合
+     */
+    @Test
+    void testSelectList() {
+        QueryWrapper<Book> wrapper = new QueryWrapper<>();
+        // 模糊查询: WHERE (book_name LIKE %Spring%)
+        wrapper.like("book_name", "Spring");
+        List<Book> bookList = bookMapper.selectList(wrapper);
+        bookList.forEach(System.out::println);
+    }
 
     /**
      * 测试分页查询
      */
-    // @Test
-    // void testSelectPage() {
-    //     /**
-    //      * current:当前页码
-    //      * size:设置每页数据个数
-    //      */
-    //     Page<Book> page = new Page<>(2, 5);
-    //     QueryWrapper<Book> wrapper = new QueryWrapper<>();
-    //     wrapper.lt("id", 200);
-    //     Page<Book> iPage = bookMapper.selectPage(page, wrapper);
-    //     System.out.println("数据总条数：" + iPage.getTotal());
-    //     System.out.println("数据总页数：" + iPage.getPages());
-    //     System.out.println("当前页数：" + iPage.getCurrent());
-    //     // 获取分页数据
-    //     List<Book> records = iPage.getRecords();
-    //     records.forEach(System.out::println);
-    // }
+    @Test
+    void testSelectPage() {
+        /**
+         * current:当前页码
+         * size:设置每页数据个数
+         */
+        Page<Book> page = new Page<>(2, 5);
+        QueryWrapper<Book> wrapper = new QueryWrapper<>();
+        wrapper.lt("id", 200);
+        Page<Book> iPage = bookMapper.selectPage(page, wrapper);
+        System.out.println("数据总条数：" + iPage.getTotal());
+        System.out.println("数据总页数：" + iPage.getPages());
+        System.out.println("当前页数：" + iPage.getCurrent());
+        // 获取分页数据
+        List<Book> records = iPage.getRecords();
+        records.forEach(System.out::println);
+    }
+
+    /**
+     * allEq
+     */
+    @Test
+    void testAllEq() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("writer", "某某");
+        map.put("price", "19.9");
+        QueryWrapper<Book> wrapper = new QueryWrapper<>();
+        // WHERE (price = ? AND writer = ?)
+        wrapper.allEq(map);
+        List<Book> list = bookMapper.selectList(wrapper);
+        list.forEach(System.out::println);
+    }
 
     @Test
     void resetPassword() {

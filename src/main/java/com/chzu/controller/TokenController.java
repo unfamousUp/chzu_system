@@ -3,7 +3,6 @@ package com.chzu.controller;
 import com.chzu.utils.JwtUser;
 import com.chzu.utils.R;
 import com.chzu.utils.Status;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
@@ -14,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @Slf4j
-@Api(tags="Token接口")
 public class TokenController {
 
     @GetMapping("/getToken")

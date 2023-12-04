@@ -1,16 +1,23 @@
 package com.chzu.controller;
 
+import com.chzu.entity.Book;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
-
-import java.awt.print.Book;
 
 @RestController
 public class SwaggerController {
 
     @GetMapping("/hello")
-    // @ApiOperation("hello控制器方法") // 配置接口显示信息
+    @ApiOperation("hello控制器方法") // 配置接口显示信息
     public String hello(){
         return "hello";
+    }
+
+    @PostMapping("/testPost")
+    @ApiOperation("testPost控制器方法") // 配置接口显示信息
+    // 如要使用form表单提交测试Post请求，则不需使用@RequestBody注解
+    public Book testPost(Book book){
+        return book;
     }
 
     /**
@@ -19,7 +26,7 @@ public class SwaggerController {
      * @return
      */
     @PostMapping("/book")
-    // @ApiOperation("Book控制器方法") // 配置接口显示信息
+    @ApiOperation("Book控制器方法") // 配置接口显示信息
     public Book book(@RequestBody Book book){
         return book;
     }

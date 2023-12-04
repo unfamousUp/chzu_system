@@ -83,7 +83,7 @@ public class CORSUserFilter extends PathMatchingFilter {
     private void configHeaders(HttpServletRequest request, HttpServletResponse response){
         //↓ 该部分均可按照自己需要自行订制，这里只是做个参考
 
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:8081");//TODO 配置你自己允许的前端源
+        response.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");//TODO 配置你自己允许的前端源
         response.setHeader("Access-Control-Allow-Methods", "POST,PUT, GET, OPTIONS, DELETE");
         // response.setHeader("Access-Control-Allow-Credentials", "true");
 

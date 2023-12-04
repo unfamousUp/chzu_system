@@ -1,9 +1,5 @@
 package com.chzu.config;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -20,13 +16,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration // 配置类
 @EnableSwagger2 // 开启Swagger2
 public class SwaggerConfig {
-
-    private Environment environment;
-
-    @Autowired
-    public SwaggerConfig(Environment environment){
-        this.environment = environment;
-    }
 
     /**
      * 创建API应用
@@ -53,9 +42,7 @@ public class SwaggerConfig {
                 // 返回一个ApiSelectorBuilder实例对象,用来控制哪些接口暴露给Swagger来展现
                 .select()
                 // 扫描接口层路径,指定扫描的包路径来定义指定要建立API的目录
-                // .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
-                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))//只扫描有ApiOperation注解的方法
-                // .apis(RequestHandlerSelectors.basePackage("com.chzu.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.chzu.controller"))
                 // 过滤指定路径
                 // .paths()
                 // 返回docket对象
@@ -79,13 +66,13 @@ public class SwaggerConfig {
                 // 描述☆
                 .description("互联网执法系统后端接口")
                 // 所属组织
-                .termsOfServiceUrl("chzu")
+                .termsOfServiceUrl("")
                 // 作者信息
                 .contact(new Contact("陈久佳", "techotaku.top", "510618293@qq.com"))
                 // 开源版本号
                 .license("Apache 2.0")
                 //  官网
-                .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0")
+                .licenseUrl("http://www.apache.org/licemses/LICENSE-2.0")
                 // 返回ApiInfo对象
                 .build();
     }

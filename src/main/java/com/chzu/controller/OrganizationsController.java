@@ -5,7 +5,6 @@ import com.chzu.service.OrganizationsService;
 import com.chzu.utils.JwtUser;
 import com.chzu.utils.R;
 import com.chzu.vo.OrgVo;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/org")
-@Api(tags="机构管理")
 public class OrganizationsController {
 
     @Autowired

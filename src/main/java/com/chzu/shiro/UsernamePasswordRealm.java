@@ -43,7 +43,7 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) {
 
-        // UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) authenticationToken;
+        UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) authenticationToken;
 
         log.info("{},", authenticationToken.getCredentials());
         // 1.获取用户登录时携带的身份信息
