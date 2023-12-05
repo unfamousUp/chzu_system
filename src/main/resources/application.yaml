@@ -7,14 +7,14 @@ spring:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
 #      url: jdbc:mysql://mysql8:3306/chzu?serverTimezone=UTC
-#      url: jdbc:mysql://mysql:3306/chzu?serverTimezone=UTC&characterEncoding=utf-8
-      url: jdbc:mysql://localhost:13306/chzu?serverTimezone=UTC
+      url: jdbc:mysql://mysql:3306/chzu?serverTimezone=UTC&characterEncoding=utf-8
+#      url: jdbc:mysql://localhost:13306/chzu?serverTimezone=UTC
       username: root
       password: root
   redis:
-    host: 121.40.235.188
+#    host: 121.40.235.188
 #    host: 192.168.85.107
-#    host: redis
+    host: redis
     port: 6379
 #    password: 123456
     lettuce:
@@ -39,7 +39,7 @@ shiro:
 #  loginUrl: /user/loginPage
 
 server:
-  port: 8088
+  port: 8080
   address: 0.0.0.0
 
 logging:
