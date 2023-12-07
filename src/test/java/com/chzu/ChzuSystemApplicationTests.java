@@ -69,7 +69,7 @@ class ChzuSystemApplicationTests {
         // jedis.auth("123456");
         // 选择库
         // jedis.select(0);
-
+        // test
         ApplicationContext ioc = new AnnotationConfigApplicationContext();
     }
 
